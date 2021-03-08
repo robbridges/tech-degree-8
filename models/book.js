@@ -16,9 +16,26 @@ module.exports = (sequelize, DataTypes) => {
   Book.init({
     title: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        customeValidator(value) {
+          if (value === null) {
+            throw new Error('Book title cannot be empty')
+          }
+        }
+      }
     },
-    author: DataTypes.STRING,
+    author: { 
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        customeValidator(value) {
+          if (value === null) {
+            throw new Error('Author cannot be empty')
+          }
+        }
+      }
+    },
     genre: DataTypes.STRING,
     year: DataTypes.INTEGER
   }, {
