@@ -27,10 +27,23 @@ router.get('/books/new', asyncHandler(async (req, res) => {
   res.render('new-book', { book: {}, title: "New Book"});
 }));
 
+router.get('/books/:id', asyncHandler(async (req, res) => {
+  const book =await Book.findByPk(req.params.id);
+  res.render("book-detail", {book, title: book.title }); 
+})); 
+
 router.post('/books/new', asyncHandler(async (req, res) => {
-  //const book = await Book.create(req.body);
-  console.log(req.body);
-  res.redirect("/books");
+  const book = await Book.create(req.body);
+  
+  res.redirect(`/books/${book.id}`);
 }));
+
+router.post('/books/:id/edit', asyncHandler(async (req, res) => {
+  const book = await Book.findByPk(req.params.id);
+  await book.update(req.body);
+  res.redirect(`/books/${book.id}`);
+}));
+
+
 
 module.exports = router;
