@@ -30,7 +30,12 @@ router.get('/books/new', asyncHandler(async (req, res) => {
 router.get('/books/:id', asyncHandler(async (req, res) => {
   const book =await Book.findByPk(req.params.id);
   res.render("book-detail", {book, title: book.title }); 
-})); 
+}));
+
+router.get('/books/:id/delete', asyncHandler(async (req, res) => {
+  const book =await Book.findByPk(req.params.id);
+  res.render("delete-book", {book, title: book.title }); 
+}));
 
 router.post('/books/new', asyncHandler(async (req, res) => {
   const book = await Book.create(req.body);
@@ -43,7 +48,6 @@ router.post('/books/:id/edit', asyncHandler(async (req, res) => {
   await book.update(req.body);
   res.redirect(`/books/${book.id}`);
 }));
-
 
 
 module.exports = router;
