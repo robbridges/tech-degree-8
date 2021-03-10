@@ -24,7 +24,7 @@ router.get('/books', asyncHandler(async (req, res) => {
 }));
 
 router.get('/books/new', asyncHandler(async (req, res) => {
-  res.render('new-book', { book: {}, title: "New Article")
+  res.render('new-book', { book: {}, title: "New Article"});
 }));
 
 module.exports = router;
