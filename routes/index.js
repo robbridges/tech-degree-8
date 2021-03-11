@@ -1,3 +1,4 @@
+const e = require('express');
 var express = require('express');
 var router = express.Router();
 const {Book} = require('../models');
@@ -29,30 +30,54 @@ router.get('/books/new', asyncHandler(async (req, res) => {
 
 router.get('/books/:id', asyncHandler(async (req, res) => {
   const book =await Book.findByPk(req.params.id);
-  res.render("book-detail", {book, title: book.title }); 
+  if(book) {
+    res.render("book-detail", {book, title: book.title });
+  } else {
+    const err = new Error("We couldn't find the page that you are looking for.");
+    err.status = 404;
+    next(err);
+  }
+   
 }));
 
 router.get('/books/:id/delete', asyncHandler(async (req, res) => {
   const book =await Book.findByPk(req.params.id);
-  res.render("delete-book", {book, title: book.title }); 
+  if(book) {
+    res.render("delete-book", {book, title: book.title });
+  } else {
+    res.sendStatus(404);
+  } 
 }));
 
 router.post('/books/new', asyncHandler(async (req, res) => {
   const book = await Book.create(req.body);
-  
+  if (book) {
   res.redirect(`/books/${book.id}`);
+  } else {
+    res.sendStatus(404);
+  }
+
 }));
 
 router.post('/books/:id/edit', asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id);
+  if (book) {
   await book.update(req.body);
   res.redirect(`/books/${book.id}`);
+  } else {
+    res.sendStatus(404);
+  }
 }));
 
 router.post('/books/:id/delete', asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id);
-  await book.destroy(req.body);
-  res.redirect('/books');
+  if (book) {
+    await book.destroy(req.body);
+    res.redirect('/books');
+  } else {
+    res.sendStatus(404);
+  }
+  
 }));
 
 
