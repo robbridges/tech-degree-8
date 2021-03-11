@@ -33,9 +33,7 @@ router.get('/books/:id', asyncHandler(async (req, res) => {
   if(book) {
     res.render("book-detail", {book, title: book.title });
   } else {
-    const err = new Error("We couldn't find the page that you are looking for.");
-    err.status = 404;
-    next(err);
+    throw error;
   }
    
 }));
