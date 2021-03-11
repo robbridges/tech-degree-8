@@ -6,7 +6,7 @@ block content
   p= book.title
   p= book.author
   p= book.year
- form(action='books' + book.id + '/delete', method="post")
+ form(action=`/books/${book.id}/delete`, method="post")
   a(class='button', href='/books') Nope! Take me back!
   br
   input(type="submit", value = "Yes permenently delete the record")
