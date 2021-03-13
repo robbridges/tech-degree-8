@@ -1,7 +1,8 @@
-const e = require('express');
-var express = require('express');
-var router = express.Router();
+
+const express = require('express');
+const router = express.Router();
 const {Book} = require('../models');
+const { Op } = require ("sequelize");
 
 function asyncHandler(cb){
   return async(req, res, next) => {
@@ -17,6 +18,42 @@ function asyncHandler(cb){
 /* GET home page. */
 router.get('/', asyncHandler(async (req, res) => {
   res.redirect('/books');
+}));
+
+router.get('/books/search', asyncHandler(async (req, res) => {
+  const search = req.query.search;
+  books = await Book.findAndCountAll({
+    attributes: ['title', 'author', 'genre', 'year', 'id'],
+   
+    where:{
+       [Op.or]:  [
+         {
+           title: {
+             [Op.substring]: search
+           }
+         },
+         {
+           author: {
+             [Op.substring]: search
+           }
+         },
+         {
+           genre:   {
+            [Op.substring]: search
+          }
+         },
+         {
+           year:   {
+            [Op.substring]: search
+          }
+         }
+
+       ]
+
+    },
+
+  })
+  res.render("index", { books: books.rows, id: books.id, search });
 }));
 
 router.get('/books', asyncHandler(async (req, res) => {
