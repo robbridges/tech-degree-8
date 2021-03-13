@@ -46,8 +46,9 @@ Middleware to handle errors
 */
 app.use(function(err, req, res, next) {
   res.locals.error = err;
-  res.status(err.status);
-  if (err.status = 404) {
+  const status = err.status || 500;
+  res.status(status);
+  if (err.status === 404) {
     res.render('page-not-found', {error: err});
   } else {
     res.render('error', {error: err} );

@@ -1,6 +1,8 @@
 extends layout
 
 block content
+ include form-errors
+
  h1 Update Book Listing
  form(action=`/books/${book.id}/edit`, method='post')
   p 
