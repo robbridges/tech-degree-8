@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  color: white;
+  background-color: #3a7ff0;
+
+}

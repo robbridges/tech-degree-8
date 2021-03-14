@@ -17,7 +17,7 @@ function asyncHandler(cb){
 
 /* GET home page. */
 router.get('/', asyncHandler(async (req, res) => {
-  res.redirect('/books');
+  res.redirect('/books/page/1');
 }));
 
 router.get('/books/search', asyncHandler(async (req, res) => {
@@ -57,9 +57,33 @@ router.get('/books/search', asyncHandler(async (req, res) => {
 }));
 
 router.get('/books', asyncHandler(async (req, res) => {
-  const books = await Book.findAll({ order: [["title"]]});
+  const books = await Book.findAll({ 
+    order: [["title"]]
+  });
   res.render('index', {books: books, title: "All Books"});
 }));
+
+router.get('/books/page/:page?', asyncHandler(async (req, res) => {
+  let page = req.params.page;
+  let totalPages;
+  let bookCount;
+  console.log(page);
+  const books = await Book.findAll({
+    
+    limit: 5, 
+    offset:( page * 5 )- 5,
+    page: page,
+    order: [["title"]]
+   
+  });
+ 
+  bookCount = await Book.count();
+  totalPages = Math.ceil(bookCount / 5) 
+  res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
+  
+}));
+  
+
 
 router.get('/books/new', asyncHandler(async (req, res) => {
   res.render('new-book', { book: {}, title: "New Book"});
@@ -125,7 +149,7 @@ router.post('/books/:id/delete', asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id);
   if (book) {
     await book.destroy(req.body);
-    res.redirect('/books');
+    res.redirect('/books/page/1');
   } else {
     throw error;
   }
