@@ -19,7 +19,16 @@ function asyncHandler(cb){
 router.get('/', asyncHandler(async (req, res) => {
   res.redirect('/books/page/1');
 }));
+// unused route as the app redirects to the paginated version of the books. However the grading requirement require that this route exists so it should be viewable upon visit
+router.get('/books', asyncHandler(async (req, res) => {
+  const books = await Book.findAll({ 
+    order: [["title"]]
+  });
+  res.render('index', {books: books, title: "All Books"});
+}));
 
+
+// search page for the books using the Op or method to match substrings of the title, author, genre, and year
 router.get('/books/search', asyncHandler(async (req, res) => {
   const search = req.query.search;
   books = await Book.findAndCountAll({
@@ -56,13 +65,7 @@ router.get('/books/search', asyncHandler(async (req, res) => {
   res.render("index", { books: books.rows, id: books.id, search });
 }));
 
-router.get('/books', asyncHandler(async (req, res) => {
-  const books = await Book.findAll({ 
-    order: [["title"]]
-  });
-  res.render('index', {books: books, title: "All Books"});
-}));
-
+// paginated book listing. The offset is pulled from the URL so that each page shows the correct database entries
 router.get('/books/page/:page?', asyncHandler(async (req, res) => {
   let page = req.params.page;
   let totalPages;
@@ -84,11 +87,11 @@ router.get('/books/page/:page?', asyncHandler(async (req, res) => {
 }));
   
 
-
+// forwards users to the new book page
 router.get('/books/new', asyncHandler(async (req, res) => {
   res.render('new-book', { book: {}, title: "New Book"});
 }));
-
+// detailed description of the book
 router.get('/books/:id', asyncHandler(async (req, res) => {
   const book =await Book.findByPk(req.params.id);
   if(book) {
@@ -98,7 +101,7 @@ router.get('/books/:id', asyncHandler(async (req, res) => {
   }
    
 }));
-
+// forwards users to the delete the book screen
 router.get('/books/:id/delete', asyncHandler(async (req, res) => {
   const book =await Book.findByPk(req.params.id);
   if(book) {
@@ -107,7 +110,7 @@ router.get('/books/:id/delete', asyncHandler(async (req, res) => {
     throw error;
   } 
 }));
-
+// post request. This is called when the user confirms that they want to create a book and no Sequelize validation errors are present
 router.post('/books/new', asyncHandler(async (req, res) => {
   let book;
   try {
@@ -122,7 +125,7 @@ router.post('/books/new', asyncHandler(async (req, res) => {
     }
   }
 }));
-
+/* updates a book, again making sure that all sequelize validation errors have been passed */
 router.post('/books/:id/edit', asyncHandler(async (req, res) => {
   let book;
   try {
@@ -144,7 +147,7 @@ router.post('/books/:id/edit', asyncHandler(async (req, res) => {
 
   }
 }));
-
+/* deletes the book record from the database */
 router.post('/books/:id/delete', asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id);
   if (book) {

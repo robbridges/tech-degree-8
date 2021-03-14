@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
+        // Validation to make sure that the title of the book is not empty
         notEmpty: {
           msg: "Book title cannot be empty"
          }
@@ -26,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     author: { 
       type: DataTypes.STRING,
       allowNull: false,
+      //Validation to make sure that the author is not empty
       validate: {
         notEmpty: {
           msg: "Book Author cannot be empty"

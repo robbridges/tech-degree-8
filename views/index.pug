@@ -30,6 +30,6 @@ block content
   
   
   
-  -var i = 1
-    while i <= totalPages
-      a( class = 'button', href=`/books/page/${i++}`)  #{i - 1}
+  -var pageCount = 1
+    while pageCount <= totalPages
+      a( class = 'button', href=`/books/page/${pageCount++}`)  #{pageCount - 1}
