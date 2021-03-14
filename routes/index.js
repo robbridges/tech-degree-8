@@ -70,7 +70,7 @@ router.get('/books/page/:page?', asyncHandler(async (req, res) => {
   let page = req.params.page;
   let totalPages;
   let bookCount;
-  console.log(page);
+  
   const books = await Book.findAll({
     
     limit: 5, 
@@ -81,8 +81,14 @@ router.get('/books/page/:page?', asyncHandler(async (req, res) => {
   });
  
   bookCount = await Book.count();
-  totalPages = Math.ceil(bookCount / 5) 
+  totalPages = Math.ceil(bookCount / 5)
+  if (page > totalPages) {
+    const err = new Error("We couldn't find the page that you are looking for.");
+    err.status = 404;
+    throw err;
+  } else { 
   res.render("index", { books, title: 'Library Books', page: page, totalPages, bookCount });
+  }
   
 }));
   
@@ -126,7 +132,7 @@ router.post('/books/new', asyncHandler(async (req, res) => {
   }
 }));
 /* updates a book, again making sure that all sequelize validation errors have been passed */
-router.post('/books/:id/edit', asyncHandler(async (req, res) => {
+router.post('/books/:id', asyncHandler(async (req, res) => {
   let book;
   try {
     book = await Book.findByPk(req.params.id);
@@ -134,7 +140,9 @@ router.post('/books/:id/edit', asyncHandler(async (req, res) => {
       await book.update(req.body);
       res.redirect(`/books/${book.id}`);
     } else {
-      throw error;
+      const err = new Error("We couldn't find the page that you are looking for.");
+      err.status = 404;
+      throw err;
     }
   } catch (error) {
     if(error.name === "SequelizeValidationError") {
