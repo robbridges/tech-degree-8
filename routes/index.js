@@ -19,6 +19,7 @@ function asyncHandler(cb){
 router.get('/', asyncHandler(async (req, res) => {
   res.redirect('/books/page/1');
 }));
+
 // unused route as the app redirects to the paginated version of the books. However the grading requirement require that this route exists so it should be viewable upon visit
 router.get('/books', asyncHandler(async (req, res) => {
   const books = await Book.findAll({ 
