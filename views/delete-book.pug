@@ -3,9 +3,9 @@ extends layout
 block content
  h1 Delete Book from database
  h3 Are you sure you wish to delete the book below? This action is not reversible.
-  p= book.title
-  p= book.author
-  p= book.year
+  p Title: #{book.title}
+  p Author: #{book.author}
+  p Year: #{book.year}
  form(action=`/books/${book.id}/delete`, method="post")
   a(class='button', href='/books/page/1') Nope! Take me back!
   br

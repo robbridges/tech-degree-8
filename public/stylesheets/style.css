@@ -15,3 +15,7 @@ input[type="button"] {
   background-color: #3a7ff0;
 
 }
+
+.errors {
+  color:crimson;
+}
