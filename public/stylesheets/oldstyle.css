@@ -1,0 +1,21 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+button,
+input[type="submit"],
+input[type="reset"],
+input[type="button"] {
+  color: white;
+  background-color: #3a7ff0;
+
+}
+
+.errors {
+  color:crimson;
+}
